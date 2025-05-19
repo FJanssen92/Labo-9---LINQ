@@ -9,7 +9,7 @@ namespace StudentScores.Entities
 
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return $"{this.FirstName} {this.LastName} - {this.Grade} - {this.Department}";
         }
     }
 }

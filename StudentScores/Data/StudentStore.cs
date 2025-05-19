@@ -1,4 +1,6 @@
 ﻿using StudentScores.Entities;
+using StudentScores.Models;
+using System.Linq;
 
 namespace StudentScores.Data
 {
@@ -62,6 +64,58 @@ namespace StudentScores.Data
                 new Student { FirstName = "Jules", LastName = "Dumoulin", Grade = 15, Department = "Marketing" },
                 };
         }
+        public Student[] AllStudents
+        {
+            get
+            {
+                return _students.ToArray();
+            }
+        }
 
+        public List<Student> PassedStudents
+        {
+            get
+            {
+
+                return _students.Where(s => s.Grade >= 10).ToList();
+
+            }
+        }
+
+        public List<Student> SortedStudents
+        {
+            get
+            {
+                return _students.OrderBy(s => s.FirstName).ThenBy(s => s.LastName).ToList();
+            }
+        }
+
+        public List<DepartmentSummary> DepartmentSummaries()
+        {
+            {
+                var students = _students
+                    .GroupBy(s => s.Department)
+                    .Select(d => new DepartmentSummary
+                            { Department = d.Key, 
+                              NumberOfStudents = d.Count(),
+                              MaxPerDepartment = d.Max(s => s.Grade)
+                    });
+
+                return students.ToList() ;  
+            }
+        }
+
+        public Summary StudentSummary()
+        {
+            return new Summary
+            {
+                NumberOfStudents = _students.Count(),
+                MaximumGrade = _students.Max(s => s.Grade),
+                MinimumGrade = _students.Min(s => s.Grade),
+                AverageGrade = _students.Average(s => s.Grade)
+            };
+
+           
+        }
     }
 }
