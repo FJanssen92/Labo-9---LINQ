@@ -35,6 +35,12 @@ namespace StudentScores
         private void OnSummary_Clicked(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(_store.StudentSummary().ToString());
+            resultListBox.ItemsSource = _store.HighestGradePerDepartment();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(_store.NumberOfDepartments().ToString() + " Departementen.");
         }
     }
 }

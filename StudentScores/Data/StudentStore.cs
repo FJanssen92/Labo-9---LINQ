@@ -1,4 +1,5 @@
-﻿using StudentScores.Entities;
+﻿using Microsoft.VisualBasic;
+using StudentScores.Entities;
 using StudentScores.Models;
 using System.Linq;
 
@@ -114,8 +115,38 @@ namespace StudentScores.Data
                 MinimumGrade = _students.Min(s => s.Grade),
                 AverageGrade = _students.Average(s => s.Grade)
             };
+        }
 
-           
+        public int NumberOfDepartments()
+        {
+            return _students
+                .Select(s => s.Department).Distinct().Count();
+        }
+
+        public List<Student> StudentsPassedOver14()
+        {
+            return _students
+                .Where(s => s.Grade >= 14)
+                .OrderBy(s => s.Grade)
+                .ThenBy(s => s.LastName)
+                .ThenBy(s => s.FirstName).ToList();
+        }
+
+        public List<Student> StudentsByDepartmentInputBox()
+        {
+            string input = Interaction.InputBox("Enter department name: ", "Department");
+            return _students
+                .Where (s => s.Department.ToLower() == input.ToLower()).ToList();
+        }
+
+        public List<Student> HighestGradePerDepartment()
+        {
+            var students = _students
+                .GroupBy(s => s.Department)
+                .SelectMany(g => g.Where(s => s.Grade == g.Max(x => x.Grade)))
+                .OrderBy(s => s.Department).ToList();
+            return students;
+
         }
     }
 }
